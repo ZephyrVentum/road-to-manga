@@ -1,4 +1,4 @@
-package miscellanea;
+package miscellanea.leetcode;
 
 public class RomanToInt {
 

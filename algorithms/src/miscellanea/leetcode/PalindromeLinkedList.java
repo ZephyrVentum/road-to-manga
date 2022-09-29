@@ -1,6 +1,4 @@
-package miscellanea;
-
-import java.math.BigInteger;
+package miscellanea.leetcode;
 
 public class PalindromeLinkedList {
     public static void main(String[] args) {
@@ -42,7 +40,7 @@ class Solution {
             prev = new ListNode(slow.val, prev);
         }
         while (prev != null) {
-            if (head.val != prev.val){
+            if (head.val != prev.val) {
                 System.out.println(false);
                 return false;
             }

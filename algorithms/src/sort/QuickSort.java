@@ -7,11 +7,11 @@ import java.util.List;
 public class QuickSort {
     public static void main(String[] args) {
         List<Integer> inputArray = Arrays.asList(3, 2, 5, 12, 0, 13, 12, 1, 4);
-        List<Integer> sortedArray = quickSort(inputArray);
+        List<Integer> sortedArray = sort(inputArray);
         System.out.println(sortedArray);
     }
 
-    private static List<Integer> quickSort(List<Integer> array) {
+    private static List<Integer> sort(List<Integer> array) {
         if (array.size() < 2) {
             return array;
         } else {
@@ -27,9 +27,9 @@ public class QuickSort {
                 }
             }
             List<Integer> result = new ArrayList<>();
-            result.addAll(quickSort(lessArray));
+            result.addAll(sort(lessArray));
             result.add(current);
-            result.addAll(quickSort(greaterArray));
+            result.addAll(sort(greaterArray));
             return result;
         }
     }

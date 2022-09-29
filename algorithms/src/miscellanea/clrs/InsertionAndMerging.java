@@ -1,4 +1,4 @@
-package miscellanea;
+package miscellanea.clrs;
 
 import java.math.BigInteger;
 
