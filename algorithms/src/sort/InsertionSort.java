@@ -12,11 +12,12 @@ public class InsertionSort {
 
     private static List<Integer> sort(List<Integer> array) {
         for (int i = 1; i < array.size(); i++) {
-            for (int j = i; j > 0 && array.get(j) < array.get(j - 1); j--) {
-                int temp = array.get(j -1);
-                array.set(j - 1, array.get(j));
-                array.set(j, temp);
+            int key = array.get(i);
+            int j = i - 1;
+            for (; j >= 0 && array.get(j) > key; j--) {
+                array.set(j + 1, array.get(j));
             }
+            array.set(j + 1, key);
         }
         return array;
     }
