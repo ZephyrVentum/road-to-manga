@@ -6,6 +6,6 @@ public class Pair<A, B> {
         this.second = second;
     }
 
-    A first;
-    B second;
+    public A first;
+    public B second;
 }
