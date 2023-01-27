@@ -21,31 +21,31 @@ public class ThreeSum {
 
     public static List<List<Integer>> threeSum(int[] nums) {
         final List<List<Integer>> result = new ArrayList<>();
-        final Map<Integer, List<Integer>> numsInMap = convertToMapSavingRecurringElements(nums);
+        final Map<Integer, Integer> numsInMap = convertToMapSavingRecurringElements(nums);
         final Set<Integer> valuesToSkip = new HashSet<>();
         for (int i = 0; i < nums.length; i++) {
             final int target = nums[i];
             if (!valuesToSkip.contains(target)) {
-                final List<List<Integer>> twoSumTripletsForGivenTarget = solveTwoSumForGivenTarget(target, i, nums, valuesToSkip, numsInMap);
+                final Set<List<Integer>> twoSumTripletsForGivenTarget = solveTwoSumForGivenTarget(target, i, nums, valuesToSkip, numsInMap);
                 valuesToSkip.add(target);
 
                 result.addAll(twoSumTripletsForGivenTarget);
-                System.out.println(twoSumTripletsForGivenTarget);
-                System.out.println(valuesToSkip);
-                System.out.println();
+//                System.out.println(twoSumTripletsForGivenTarget);
+//                System.out.println(valuesToSkip);
+//                System.out.println();
             }
         }
         return new ArrayList<>(result);
     }
 
-    private static List<List<Integer>> solveTwoSumForGivenTarget(
+    private static Set<List<Integer>> solveTwoSumForGivenTarget(
             int target,
             int targetIndex,
             int[] nums,
             Set<Integer> valuesToSkip,
-            Map<Integer, List<Integer>> numsInMap
+            Map<Integer, Integer> numsInMap
     ) {
-        final List<List<Integer>> result = new ArrayList<>();
+        final Set<List<Integer>> result = new HashSet<>();
         final Set<Integer> localValuesToSkip = new HashSet<>(valuesToSkip);
         for (int j = targetIndex + 1; j < nums.length; j++) {
             final int firstTwoSumValue = nums[j];
@@ -54,8 +54,7 @@ public class ThreeSum {
                 if (!localValuesToSkip.contains(secondTwoSumValue)) {
                     localValuesToSkip.add(firstTwoSumValue);
                     localValuesToSkip.add(secondTwoSumValue);
-                    final List<Integer> indexesOfSecondValue = numsInMap.get(secondTwoSumValue);
-                    final int indexOfSecondValue = getAcceptableIndexOfSecondValue(indexesOfSecondValue, targetIndex, j);
+                    final int indexOfSecondValue = getAcceptableIndexOfSecondValue(numsInMap,secondTwoSumValue, targetIndex, j);
                     if (indexOfSecondValue != -1) {
                         final List<Integer> triplet = new ArrayList<>();
                         triplet.add(target);
@@ -72,31 +71,23 @@ public class ThreeSum {
     }
 
     private static int getAcceptableIndexOfSecondValue(
-            List<Integer> indexesOfSecondValue,
+            Map<Integer, Integer> numsInMap,
+            int secondTwoSumValue,
             int targetIndex,
             int firstTwoSumIndex
     ) {
         int result = -1;
-        if (indexesOfSecondValue != null) {
-            for (int index : indexesOfSecondValue) {
-                if (index > targetIndex && index > firstTwoSumIndex) {
-                    result = index;
-                }
-            }
+        final Integer index = numsInMap.get(secondTwoSumValue);
+        if (index!= null && index > targetIndex && index > firstTwoSumIndex) {
+            result = index;
         }
         return result;
     }
 
-    private static Map<Integer, List<Integer>> convertToMapSavingRecurringElements(int[] input) {
-        final Map<Integer, List<Integer>> result = new HashMap<>();
+    private static Map<Integer, Integer> convertToMapSavingRecurringElements(int[] input) {
+        final Map<Integer, Integer> result = new HashMap<>();
         for (int i = 0; i < input.length; i++) {
-            final int element = input[i];
-            List<Integer> existingEntryValue = result.getOrDefault(element, new ArrayList<>());
-            final boolean wasEmpty = existingEntryValue.isEmpty();
-            existingEntryValue.add(i);
-            if (wasEmpty) {
-                result.put(element, existingEntryValue);
-            }
+            result.put(input[i], i);
         }
         return result;
     }
