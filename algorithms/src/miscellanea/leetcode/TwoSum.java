@@ -13,7 +13,7 @@ public class TwoSum {
             for (int j : i) {
                 System.out.print(" " + j + " ");
             }
-            System.out.println("]\n");
+            System.out.println("]");
         }
     }
 
