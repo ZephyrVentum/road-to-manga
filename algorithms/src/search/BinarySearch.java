@@ -37,14 +37,14 @@ public class BinarySearch {
     }
 
     static int search(List<Integer> sortedArray, int searchingNumber, int leftBound, int rightBound) {
-        System.out.println("L = " + leftBound);
-        System.out.println("R = " + rightBound);
+//        System.out.println("L = " + leftBound);
+//        System.out.println("R = " + rightBound);
         int position = (rightBound + leftBound) / 2;
         int number = sortedArray.get(position);
-        if (leftBound == rightBound) {
-            return -1;
-        } else if (number == searchingNumber) {
+        if (number == searchingNumber) {
             return position;
+        } else if (leftBound >= rightBound) {
+            return -1;
         } else {
             if (number < searchingNumber) {
                 return search(sortedArray, searchingNumber, position + 1, rightBound);
