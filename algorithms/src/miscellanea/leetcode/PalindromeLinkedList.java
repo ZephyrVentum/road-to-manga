@@ -23,6 +23,18 @@ class ListNode {
         this.val = val;
         this.next = next;
     }
+
+    @Override
+    public String toString() {
+        ListNode local = new ListNode(val, next);
+        String result = "";
+        while (local != null) {
+            result += local.val;
+            result += ' ';
+            local = local.next;
+        }
+        return result;
+    }
 }
 
 class Solution {
