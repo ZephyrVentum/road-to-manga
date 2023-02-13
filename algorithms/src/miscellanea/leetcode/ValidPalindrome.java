@@ -11,8 +11,8 @@ public class ValidPalindrome {
     public boolean isPalindrome(String s) {
         String cleaned = s.toLowerCase().replaceAll("[\\W_]", "");
         StringBuilder stringBuilder = new StringBuilder();
-        for (char symbol : cleaned.toCharArray()){
-            stringBuilder.insert(0,symbol);
+        for (char symbol : cleaned.toCharArray()) {
+            stringBuilder.insert(0, symbol);
         }
         String reversed = stringBuilder.toString();
         return cleaned.equals(reversed);
