@@ -1,12 +1,13 @@
 package miscellanea.leetcode;
 
+import utils.Pair;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
 public class BinaryTreeLevelOrderTraversal {
-
     static class TreeNode {
         int val;
         TreeNode left;
@@ -26,49 +27,36 @@ public class BinaryTreeLevelOrderTraversal {
         }
     }
 
-
     public static void main(String[] args) {
 //        System.out.println(new BinaryTreeLevelOrderTraversal().levelOrder(new TreeNode(1, new TreeNode(), new TreeNode()), new TreeNode(2));
     }
 
     public List<List<Integer>> levelOrder(TreeNode root) {
         List<List<Integer>> result = new ArrayList<>();
-        Queue<TreeNode> queue = new LinkedList<>();
+        Queue<Pair<TreeNode, Integer>> queue = new LinkedList<>();
+        int lastNodeLevel = 0;
         if (root != null) {
-            queue.add(root);
+            queue.add(new Pair<TreeNode, Integer>(root, lastNodeLevel));
         }
+        List<Integer> level = new ArrayList<>();
         while (!queue.isEmpty()) {
-            final TreeNode currentNode = queue.poll();
-            if (result.isEmpty()) {
-                List<Integer> level = new ArrayList<>();
-                level.add(currentNode.val);
+            final Pair<TreeNode, Integer> currentPair = queue.poll();
+            final TreeNode currentNode = currentPair.first;
+            final int currentLevel = currentPair.second;
+            if (lastNodeLevel < currentLevel) {
+                lastNodeLevel = currentLevel;
                 result.add(level);
+                level = new ArrayList<>();
             }
-            if (currentNode.left != null && currentNode.right != null) {
-                List<Integer> level = new ArrayList<>();
-                level.add(currentNode.left.val);
-                level.add(currentNode.right.val);
-                result.add(level);
-                queue.add(currentNode.left);
-                queue.add(currentNode.right);
-            } else if (currentNode.left != null){
-                queue.add(currentNode.left);
-                List<Integer> level = new ArrayList<>();
-                level.add(currentNode.left.val);
-                result.add(level);
-            } else if (currentNode.right != null){
-                queue.add(currentNode.right);
-                List<Integer> level = new ArrayList<>();
-                level.add(currentNode.right.val);
-                result.add(level);
+            level.add(currentNode.val);
+            if (currentNode.left != null) {
+                queue.add(new Pair<TreeNode, Integer>(currentNode.left, currentLevel + 1));
+            }
+            if (currentNode.right != null) {
+                queue.add(new Pair<TreeNode, Integer>(currentNode.right, currentLevel + 1));
             }
         }
+        result.add(level);
         return result;
     }
 }
-
-//else if (queue.size() == 1) {
-//        List<Integer> level = new ArrayList<>();
-//        level.add(currentNode.val);
-//        result.add(level);
-//        }

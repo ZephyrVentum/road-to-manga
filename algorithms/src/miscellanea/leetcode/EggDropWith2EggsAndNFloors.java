@@ -4,8 +4,6 @@ public class EggDropWith2EggsAndNFloors {
 
     public static void main(String[] args) {
         System.out.println(new EggDropWith2EggsAndNFloors().twoEggDrop(42));
-
-
     }
 
     public int twoEggDrop(int n) {
