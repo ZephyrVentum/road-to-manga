@@ -1,6 +1,7 @@
 package miscellanea.leetcode;
 
 import utils.Pair;
+import utils.TreeNode;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -8,27 +9,8 @@ import java.util.List;
 import java.util.Queue;
 
 public class BinaryTreeLevelOrderTraversal {
-    static class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode() {
-        }
-
-        TreeNode(int val) {
-            this.val = val;
-        }
-
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
-        }
-    }
-
     public static void main(String[] args) {
-//        System.out.println(new BinaryTreeLevelOrderTraversal().levelOrder(new TreeNode(1, new TreeNode(), new TreeNode()), new TreeNode(2));
+
     }
 
     public List<List<Integer>> levelOrder(TreeNode root) {
