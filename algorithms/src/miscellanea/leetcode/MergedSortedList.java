@@ -29,8 +29,6 @@ public class MergedSortedList {
         }
 
         while (list1 != null || list2 != null) {
-
-
             if (list1 == null) {
                 if (head.next == null) {
                     head.next = list2;
