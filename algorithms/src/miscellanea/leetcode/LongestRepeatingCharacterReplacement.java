@@ -1,6 +1,7 @@
 package miscellanea.leetcode;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class LongestRepeatingCharacterReplacement {
@@ -9,40 +10,45 @@ public class LongestRepeatingCharacterReplacement {
         System.out.println(new LongestRepeatingCharacterReplacement().characterReplacement("BAXXXAZAAZZAAXX", 2));
     }
 
-    static class MetaChar {
-        public MetaChar(int remainingK, int fromIndex, int toIndex) {
-            this.remainingK = remainingK;
-            this.fromIndex = fromIndex;
-            this.toIndex = toIndex;
-        }
-
-        public int remainingK;
-        public int fromIndex;
-        public int toIndex;
-    }
-
     public int characterReplacement(String s, int k) {
-        Map<Character, MetaChar> sMap = new HashMap<>();
+        Map<Character, LinkedList<Integer>> sMap = new HashMap<>();
         int max = 0;
         char[] sChars = s.toCharArray();
         for (int i = 0; i < sChars.length; i++) {
             char currentChar = sChars[i];
-            if (currentChar == 'S'){
-                System.out.println("kek");
-            }
-            MetaChar metaChar = sMap.getOrDefault(currentChar, new MetaChar(k, i - 1, i - 1));
-            int newRemainingK = metaChar.remainingK - (i - (metaChar.toIndex + 1));
-            if (newRemainingK >= 0) {
-                int newMax = newRemainingK + (i - metaChar.fromIndex);
-                max = Math.max(newMax, max);
-                metaChar.remainingK = newRemainingK;
+            LinkedList<Integer> charIndices = sMap.getOrDefault(currentChar, new LinkedList<>());
+            if (!charIndices.isEmpty()) {
+                int remainingK = getRemainingK(charIndices, k);
+                int lastIndex = charIndices.getLast();
+                int newRemainingK = remainingK - (i - (lastIndex + 1));
+                if (newRemainingK >= 0) {
+                    int newMax = newRemainingK + (i - (charIndices.getFirst() - 1));
+                    max = Math.max(newMax, max);
+                    charIndices.add(i);
+                } else {
+                    charIndices.removeFirst();
+                    i--;
+                }
             } else {
-                metaChar.remainingK = k;
-                metaChar.fromIndex = i - 1;
+                int newMax = k + 1;
+                max = Math.max(newMax, max);
+                charIndices.add(i);
             }
-            metaChar.toIndex = i;
-            sMap.put(currentChar, metaChar);
+            sMap.put(currentChar, charIndices);
         }
         return Math.min(max, s.length());
+    }
+
+    int getRemainingK(LinkedList<Integer> charIndices, int k) {
+        int usedK = 0;
+        if (charIndices.size() > 1) {
+            int pivot = charIndices.peek() - 1;
+            for (int index : charIndices) {
+                int difference = index - (pivot + 1);
+                usedK += difference;
+                pivot = index;
+            }
+        }
+        return k - usedK;
     }
 }
