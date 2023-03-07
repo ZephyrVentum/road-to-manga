@@ -5,29 +5,43 @@ import java.util.Stack;
 public class DecodeString {
 
     public static void main(String[] args) {
-        System.out.println(new DecodeString().decodeString("3[z]2[2[y]pq4[2[jk]e1[f]]]ef"));
+        System.out.println(new DecodeString().decodeString("2[l3[e4[c5[t]]]]"));
+//        System.out.println(new DecodeString().decodeString("sd2[f2[e]g]i"));
+//        System.out.println(new DecodeString().decodeString("3[z]2[2[y]pq4[2[jk]e1[f]]]ef"));
 //        System.out.println(Character.digit('5', 10));
     }
 
     public String decodeString(String s) {
         final char starter = '[';
         final char ender = ']';
-        String answer = "";
-        Stack<Integer> numbers = new Stack<>();
-        Stack<String> encodedStrings = new Stack<>();
-        StringBuilder encodedString = new StringBuilder();
-        StringBuilder number = new StringBuilder();
+        Stack<Integer> numbersStack = new Stack<>();
+        Stack<String> encodedStack = new Stack<>();
+        StringBuilder encodedBuilder = new StringBuilder();
+        StringBuilder numberBuilder = new StringBuilder();
+        StringBuilder answerBuilder = new StringBuilder();
         char[] chars = s.toCharArray();
         for (char currentChar : chars) {
             switch (currentChar) {
                 case starter:
-                    if (!encodedString.toString().isEmpty()) {
-                        encodedStrings.add(encodedString.toString());
-                        encodedString = new StringBuilder();
+                    String encodedString = encodedBuilder.toString();
+                    if (!encodedString.isEmpty()) {
+                        if (!numbersStack.isEmpty()) {
+                            if (numbersStack.size() > encodedStack.size()) {
+                                encodedStack.add(encodedString);
+                            } else if (!encodedStack.isEmpty()) {
+                                String topEncodedString = encodedStack.pop();
+                                encodedString = topEncodedString + encodedString;
+                                encodedStack.add(encodedString);
+                            }
+                        } else {
+                            answerBuilder.append(encodedString);
+                        }
+                        encodedBuilder = new StringBuilder();
                     }
-                    if (!number.toString().isEmpty()) {
-                        numbers.add(Integer.parseInt(number.toString()));
-                        number = new StringBuilder();
+                    String number = numberBuilder.toString();
+                    if (!number.isEmpty()) {
+                        numbersStack.add(Integer.parseInt(number));
+                        numberBuilder = new StringBuilder();
                     }
                     break;
                 case '0':
@@ -40,33 +54,42 @@ public class DecodeString {
                 case '7':
                 case '8':
                 case '9':
-                    number.append(currentChar);
+                    numberBuilder.append(currentChar);
                     break;
                 case ender:
-                    if (!encodedString.toString().isEmpty()) {
-                        encodedStrings.add(encodedString.toString());
-                        encodedString = new StringBuilder();
-                    }
-                    String currentEncodedString = encodedStrings.pop();
-                    String decoded = "";
-                    int currentTimes = numbers.pop();
-                    for (int j = 0; j < currentTimes; j++) {
-                        decoded += currentEncodedString;
-                    }
-                    if (!numbers.isEmpty()) {
-                        if (!encodedStrings.isEmpty()) {
-                            String top = encodedStrings.pop();
-                            decoded = top + decoded;
+                    String notCompetedEncodedString = encodedBuilder.toString();
+                    if (!notCompetedEncodedString.isEmpty()) {
+                        if (numbersStack.size() > encodedStack.size()) {
+                            encodedStack.add(notCompetedEncodedString);
+                        } else if (!encodedStack.isEmpty()) {
+                            String topEncodedString = encodedStack.pop();
+                            notCompetedEncodedString = topEncodedString + notCompetedEncodedString;
+                            encodedStack.add(notCompetedEncodedString);
                         }
-                    }else {
-                        answer+= decoded;
+                        encodedBuilder = new StringBuilder();
                     }
-                    encodedStrings.add(decoded);
+                    String currentEncodedString = encodedStack.pop();
+                    StringBuilder decoded = new StringBuilder();
+                    int currentNumber = numbersStack.pop();
+                    for (int j = 0; j < currentNumber; j++) {
+                        decoded.append(currentEncodedString);
+                    }
+                    if (!numbersStack.isEmpty()) {
+                        if (numbersStack.size() > encodedStack.size()) {
+                            encodedStack.add(decoded.toString());
+                        } else if (!encodedStack.isEmpty()) {
+                            String topEncodedString = encodedStack.pop();
+                            decoded.insert(0, topEncodedString);
+                            encodedStack.add(decoded.toString());
+                        }
+                    } else {
+                        answerBuilder.append(decoded);
+                    }
                     break;
                 default:
-                    encodedString.append(currentChar);
+                    encodedBuilder.append(currentChar);
             }
         }
-        return (encodedStrings.isEmpty() ? "" : encodedStrings.pop()) + encodedString;
+        return answerBuilder.toString() + (encodedStack.isEmpty() ? "" : encodedStack.pop()) + encodedBuilder.toString();
     }
 }
