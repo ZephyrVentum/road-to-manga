@@ -14,25 +14,37 @@ public class BruteCollinearPoints {
     private ArrayList<LineSegment> segments;
 
     public BruteCollinearPoints(Point[] points) {
-        if (points == null || points.length < 4) {
+        if (points == null) {
             throw new IllegalArgumentException();
         }
         segments = new ArrayList<>();
         for (int p = 0; p < points.length; p++) {
+            Point pPoint = points[p];
+            if (pPoint == null) {
+                throw new IllegalArgumentException();
+            }
             for (int q = p + 1; q < points.length; q++) {
+                Point qPoint = points[q];
+                if (qPoint == null) {
+                    throw new IllegalArgumentException();
+                }
+                if (pPoint.compareTo(qPoint) == 0) {
+                    throw new IllegalArgumentException();
+                }
                 for (int r = q + 1; r < points.length; r++) {
+                    Point rPoint = points[r];
+                    if (rPoint == null) {
+                        throw new IllegalArgumentException();
+                    }
+                    if (qPoint.compareTo(rPoint) == 0) {
+                        throw new IllegalArgumentException();
+                    }
                     for (int s = r + 1; s < points.length; s++) {
-                        Point pPoint = points[p];
-                        Point qPoint = points[q];
-                        Point rPoint = points[r];
                         Point sPoint = points[s];
-
-                        if (pPoint == null || qPoint == null || rPoint == null || sPoint == null) {
+                        if (sPoint == null) {
                             throw new IllegalArgumentException();
                         }
-
-                        if (pPoint.compareTo(qPoint) * pPoint.compareTo(rPoint) * pPoint.compareTo(
-                                sPoint) == 0) {
+                        if (rPoint.compareTo(sPoint) == 0) {
                             throw new IllegalArgumentException();
                         }
 
@@ -40,18 +52,18 @@ public class BruteCollinearPoints {
                         double pToR = pPoint.slopeTo(rPoint);
                         double pToS = pPoint.slopeTo(sPoint);
 
-                        StdOut.println(String.format("P%s, Q%s, R%s, S%s", pPoint.toString(),
-                                                     qPoint.toString(), rPoint.toString(),
-                                                     sPoint.toString()));
-
-                        StdOut.println(String.format("pToQ: %s\npToR: %s\npToS: %s", pToQ, pToR,
-                                                     pToS));
+                        // StdOut.println(String.format("P%s, Q%s, R%s, S%s", pPoint.toString(),
+                        //                              qPoint.toString(), rPoint.toString(),
+                        //                              sPoint.toString()));
+                        //
+                        // StdOut.println(String.format("pToQ: %s\npToR: %s\npToS: %s", pToQ, pToR,
+                        //                              pToS));
 
                         if (pToQ == pToR && pToQ == pToS) {
-                            StdOut.println("Collinear!");
+                            // StdOut.println("Collinear!");
                             createLineSegment(pPoint, qPoint, rPoint, sPoint);
                         }
-                        StdOut.println("");
+                        // StdOut.println("");
                     }
                 }
             }
@@ -112,7 +124,7 @@ public class BruteCollinearPoints {
         BruteCollinearPoints collinear = new BruteCollinearPoints(points);
         for (LineSegment segment : collinear.segments()) {
             StdOut.println(segment);
-            // segment.draw();
+            segment.draw();
         }
         StdDraw.show();
     } // the line segments
